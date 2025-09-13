@@ -1,5 +1,6 @@
 <template>
   <view class="content">
+    <Loading />
     <image class="logo" src="/static/logo.png" />
     <view class="text-area">
       <text class="title">{{ title }}</text>
@@ -9,6 +10,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import Loading from '@/components/loading/index.vue'
 const title = ref('Hello')
 </script>
 
