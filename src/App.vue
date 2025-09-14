@@ -10,4 +10,4 @@ onHide(() => {
   console.log("App Hide");
 });
 </script>
-<style lang="less" scoped></style>
+<style lang="less"></style>
