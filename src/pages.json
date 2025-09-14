@@ -6,14 +6,18 @@
         "navigationStyle": "custom"
       }
     },
-	  {
-		  "path": "pages/login/login",
-		  "style": {
-            "navigationStyle": "custom"
-
-		  }
-	  }
-
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

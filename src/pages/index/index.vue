@@ -1,13 +1,26 @@
 <template>
   <view class="home-page">
     <view class="btn-wrap">
-      <view class="btn dark-btn">Login</view>
-      <view class="btn light-btn">Register</view>
+      <view class="btn dark-btn" @click="toLogin">Login</view>
+      <view class="btn light-btn" @click="toRegister">Register</view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+
+
+function toLogin() {
+  uni.navigateTo({
+    url: '/pages/login/login'
+  })
+}
+
+function toRegister() {
+  uni.navigateTo({
+    url: '/pages/register/register'
+  })
+}
 
 </script>
 
