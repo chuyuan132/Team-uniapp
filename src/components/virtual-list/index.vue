@@ -1,10 +1,10 @@
 <template>
   <view class="virtual-container">
-    <view class="empty-block" :style="{ height: listHeight + 'px' }"></view>
+    <view class="empty-block" :style="{height: totalHeight + 'rpx'}"></view>
     <view class="virtual-list">
-      <view class="virtual-item" v-for="(item, index) in value" :key="index">
+      <view class="virtual-item">
         <slot name="default">
-          {{ item }}
+
         </slot>
       </view>
     </view>
@@ -12,56 +12,97 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from "vue";
+/**
+ * 1、对外接收一个数据源
+ * 2、初始化位置信息
+ * 3、计算初始总体长度
+ * 4、获取可视窗口高度
+ * 5、计算当前窗口可容纳多少节点
+ * 6、得出开始时索引和结束索引
+ * 7、滑动事件，更新索引值，计算偏移值
+ * 8、更新预估高度数组
+ */
+import {onMounted, ref} from "vue";
+import {computed, watch} from "@vue/runtime-core";
+
+
 const props = defineProps({
-  value: {
+  dataSource: {
     type: Array,
-    default: () => [],
+    default:() => []
   },
   itemHeight: {
     type: Number,
-    default: 20,
-  },
-  buffRate: {
-    type: Number,
-    default: 0.5,
-  },
-});
+    default: 80
+  }
+})
 
-const listHeight = computed(() => {
-  console.log(props.value.length * props.itemHeight);
+interface IPositionItem {
+  height: number;
+  top: number;
+  bottom: number;
+}
 
-  return props.value.length * props.itemHeight;
-});
 
-const containerHeight = ref(0);
+const positions = ref<IPositionItem[]>([]);
+const screenHeight = ref(0);
 
-const visibleCount = computed(() => {
-  return Math.ceil(containerHeight.value / props.itemHeight);
-});
+const totalHeight = computed(() => {
+  return positions.value[positions.value.length - 1].bottom;
+})
+
+
+function setPositions(arr: any[]) {
+  if(!arr || !arr.length || !Array.isArray(arr)) return;
+  positions.value = arr.reduce((acc, item, index) => {
+    const itemHeight = props.itemHeight;
+    const newItem = {
+      height: itemHeight,
+      top: index * itemHeight,
+      bottom: (index + 1) * itemHeight
+    }
+    acc.push(newItem);
+    return acc;
+  }, [])
+}
+
+function getDOMInfo(val: string) {
+  return new Promise((resolve, reject) => {
+    uni.createSelectorQuery().select(val).boundingClientRect().exec(res => {
+      resolve(res)
+    })
+  })
+}
+
+
+
+watch(() => props.dataSource, (nVal) => {
+  setPositions(nVal)
+})
 
 onMounted(() => {
-  uni
-    .createSelectorQuery()
-    .select(".virtual-container")
-    .boundingClientRect()
-    .exec((res) => {
-      containerHeight.value = res.height;
-    });
-});
+  getDOMInfo(".virtual-container").then(res => {
+    console.log(res)
+  })
+})
+
+
 </script>
 
 <style scoped lang="less">
 .virtual-container {
   position: relative;
+  width: 100%;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
+
 .virtual-list {
   position: absolute;
   left: 0;
-  top: 0;
   right: 0;
+  top: 0;
 }
+
 </style>

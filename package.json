@@ -53,7 +53,7 @@
     "lodash-es": "^4.17.21",
     "qs": "^6.14.0",
     "vant": "^4.9.21",
-    "vue": "^3.4.21",
+    "vue": "3.5",
     "vue-i18n": "^9.1.9"
   },
   "devDependencies": {
@@ -62,10 +62,12 @@
     "@dcloudio/uni-cli-shared": "3.0.0-4030620241128001",
     "@dcloudio/uni-stacktracey": "3.0.0-4030620241128001",
     "@dcloudio/vite-plugin-uni": "3.0.0-4030620241128001",
+    "@ndaidong/txtgen": "^4.0.1",
     "@types/lodash-es": "^4.17.12",
     "@types/qs": "^6.14.0",
     "@vue/runtime-core": "^3.4.21",
     "@vue/tsconfig": "^0.1.3",
+    "faker": "^6.6.6",
     "less": "^4.4.1",
     "typescript": "^4.9.4",
     "unplugin-vue-components": "^29.0.0",

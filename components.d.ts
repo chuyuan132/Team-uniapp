@@ -15,9 +15,6 @@ declare module 'vue' {
     VanButton: typeof import('vant/es')['Button']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanField: typeof import('vant/es')['Field']
-    VanIcon: typeof import('vant/es')['Icon']
-    VanPopup: typeof import('vant/es')['Popup']
-    VirttualList: typeof import('./src/components/virttual-list/index.vue')['default']
     VirtualList: typeof import('./src/components/virtual-list/index.vue')['default']
   }
 }
