@@ -1,12 +1,12 @@
-import { showNotify } from 'vant';
+import { showNotify } from "vant";
 
-const BASE_URL = 'http://localhost:8001'
+const BASE_URL = "http://localhost:8001";
 const TIME_OUT = 5000;
 
 interface IResult {
-    code: number;
-    data: any;
-    message: string;
+  code: number;
+  data: any;
+  message: string;
 }
 
 /**
@@ -14,8 +14,7 @@ interface IResult {
  * @param message
  */
 function errorHandler(message: string) {
-    showNotify({ type: 'danger', message });
-
+  showNotify({ type: "danger", message });
 }
 
 /**
@@ -23,31 +22,31 @@ function errorHandler(message: string) {
  * @param options
  */
 function request(options: UniApp.RequestOptions) {
-    options.url = BASE_URL + options.url;
-    return new Promise((resolve, reject) => {
-        const header = {
-            'content-type': 'application/json',
-            ...options.header
+  options.url = BASE_URL + options.url;
+  return new Promise<commonRequest.IRequestResult>((resolve, reject) => {
+    const header = {
+      "content-type": "application/json",
+      ...options.header,
+    };
+    uni.request({
+      timeout: TIME_OUT,
+      ...options,
+      header,
+      success: (res) => {
+        const data = res.data as IResult;
+        if (data.code !== 200) {
+          errorHandler(data.message);
+          reject(data);
+        } else {
+          resolve(data);
         }
-        uni.request({
-            timeout:TIME_OUT,
-            ...options,
-            header,
-            success: (res) => {
-                const data = res.data as IResult;
-                if(data.code !== 200) {
-                    errorHandler(data.message)
-                    reject(data)
-                } else {
-                    resolve(data)
-                }
-            },
-            fail: (err) => {
-                errorHandler('系统错误,请稍后重试')
-                reject(err);
-            }
-        })
-    })
+      },
+      fail: (err) => {
+        errorHandler("系统错误,请稍后重试");
+        reject(err);
+      },
+    });
+  });
 }
 
 /**
@@ -56,12 +55,15 @@ function request(options: UniApp.RequestOptions) {
  * @param data
  * @constructor
  */
-function GET(url: string, data: Record<string, any>) {
-    return request({
-        url,
-        method: 'GET',
-        data
-    } as UniApp.RequestOptions)
+function GET(url: string, data: Record<string, any> = {}) {
+  return request({
+    url,
+    method: "GET",
+    header: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    data,
+  } as UniApp.RequestOptions);
 }
 
 /**
@@ -70,16 +72,12 @@ function GET(url: string, data: Record<string, any>) {
  * @param data
  * @constructor
  */
-function POST(url: string, data: Record<string, any>) {
-    return request({
-        url,
-        method: 'POST',
-        data
-    } as UniApp.RequestOptions)
+function POST(url: string, data: Record<string, any> = {}) {
+  return request({
+    url,
+    method: "POST",
+    data,
+  } as UniApp.RequestOptions);
 }
 
-export {
-    request,
-    GET,
-    POST
-};
+export { request, GET, POST };

@@ -2,7 +2,7 @@
   <view class="common-page">
     <view class="content-wrap">
       <view class="top">
-        <view class="title">欢迎回来！很高兴再见到你</view>
+        <view class="title">哈喽！注册开始使用吧</view>
         <view class="form-wrap">
           <van-cell-group>
             <van-field
@@ -20,22 +20,27 @@
               placeholder="输入密码"
               size="large"
             />
+            <van-field
+              v-model="formState.username"
+              :clearable="true"
+              class="form-item"
+              placeholder="输入用户名"
+              size="large"
+            />
           </van-cell-group>
         </view>
-        <view class="assist-wrap" @click="findPassword"> 忘记密码？ </view>
-        <view class="btn-wrap">
-          <van-button
-            :loading="loading"
-            class="btn"
-            color="#000"
-            @click="handleLogin"
-            >登录</van-button
-          >
-        </view>
+
+        <van-button
+          :loading="loading"
+          class="btn"
+          color="#000"
+          @click="handleRegister"
+          >注册</van-button
+        >
       </view>
       <view class="bottom">
-        没有账号?
-        <text class="spec-text" @click="toRegister">现在注册</text>
+        已有账号?
+        <text class="spec-text" @click="toLogin">去登录</text>
       </view>
     </view>
   </view>
@@ -44,23 +49,33 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { showNotify } from "vant";
-import { userLogin } from "@/api";
+import { userRegister } from "@/api";
 
 const loading = ref(false);
 const formState = ref({
   phone: "",
   password: "",
+  username: "",
 });
 
 /**
- * 用户登录
+ * 去登录
  */
-async function handleLogin() {
-  const { phone, password } = formState.value;
-  if (!phone || !password) {
+function toLogin() {
+  uni.redirectTo({
+    url: "/pages/login/login",
+  });
+}
+
+/**
+ * 用户注册
+ */
+async function handleRegister() {
+  const { phone, password, username } = formState.value;
+  if (!phone || !password || !username) {
     showNotify({
       type: "warning",
-      message: "请完整输入手机号或密码",
+      message: "请填写完整信息",
     });
     return;
   }
@@ -80,84 +95,59 @@ async function handleLogin() {
   }
   try {
     loading.value = true;
-    await userLogin({
+    await userRegister({
       phone,
       password,
+      username,
     });
-    showNotify({ type: "success", message: "登录成功" });
+    showNotify({ type: "success", message: "注册成功" });
     setTimeout(() => {
       uni.redirectTo({
-        url: "/pages/home/home",
+        url: "/pages/login/login",
       });
     }, 1000);
   } finally {
     loading.value = false;
   }
 }
-
-/**
- * 找回密码
- */
-function findPassword() {
-  showNotify({ type: "primary", message: "该功能暂未开放" });
-}
-
-/**
- * 去注册
- */
-function toRegister() {
-  uni.navigateTo({
-    url: "/pages/register/register",
-  });
-}
 </script>
 
 <style lang="less" scoped>
 .content-wrap {
   display: flex;
-  height: 100%;
+  flex-direction: column;
   box-sizing: border-box;
   padding: 100rpx 0 0;
-  flex-direction: column;
   justify-content: space-between;
+  height: 100%;
+}
+.title {
+  font-size: 48rpx;
+  line-height: 70rpx;
+  margin-bottom: 80rpx;
+  font-weight: bold;
+}
 
-  .top {
-    .title {
-      font-size: 48rpx;
-      line-height: 70rpx;
-      margin-bottom: 80rpx;
-      font-weight: bold;
-    }
-
-    .form-wrap {
-      .form-item {
-        margin-bottom: 50rpx;
-        background-color: #f7f8f9;
-        border-radius: 10rpx;
-      }
-    }
-
-    .assist-wrap {
-      text-align: right;
-      color: #6a707c;
-      margin-bottom: 80rpx;
-    }
-  }
-
-  .bottom {
-    text-align: center;
-    padding: 40rpx 0;
-
-    .spec-text {
-      font-weight: bold;
-    }
+.form-wrap {
+  .form-item {
+    margin-bottom: 50rpx;
+    background-color: #f7f8f9;
+    border-radius: 10rpx;
   }
 }
 
 .btn {
   width: 100%;
   border-radius: 40rpx;
-  margin: 0;
+  margin-top: 40rpx;
+}
+.bottom {
+  text-align: center;
+  padding: 40rpx 0;
+
+  .spec-text {
+    font-weight: bold;
+  }
 }
 
 :deep(.van-field__control) {
