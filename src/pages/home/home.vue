@@ -5,7 +5,7 @@
 <!--      <van-icon :size="30" name="search" />-->
 <!--    </view>-->
     <view class="content-wrap">
-      <VirtualList :dataSource="list" >
+      <VirtualList :dataSource="list" @load-more="loadMore">
         <template #default="{item}">
           <view class="item">
             <view>{{item.label}} - {{item.value}}</view>
@@ -29,16 +29,32 @@ async function getList() {
     page_no: 2,
     page_size: 10,
   });
-  console.log(data);
 }
 
 function mockData() {
-  for(let i=0; i<1000; i++) {
+  for(let i=0; i<10; i++) {
     list.value.push({
       label: i + 1,
       value:faker.lorem.sentences()
     })
   }
+}
+
+
+function loadMore(done:() => void) {
+  const addList:any[] = [];
+  const length = list.value.length;
+  setTimeout(() => {
+    for(let i=0; i<10; i++) {
+      addList.push({
+        label: length + i,
+        value:faker.lorem.sentences()
+      })
+    }
+    list.value.push(...addList);
+    done()
+  }, 2000)
+
 }
 
 onMounted(() => {

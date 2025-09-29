@@ -8,18 +8,30 @@ const props = defineProps({
     type: String,
     default: "#409eff",
   },
+  size: {
+    type: String,
+    default: 'small'
+  }
 });
+
+const sizeMap: any = {
+  small: 50,
+  large: 100
+}
 
 const cssStyle = {
   "--bg-color": props.bgColor,
+  '--icon-size': sizeMap[props.size] + 'rpx',
+  '--icon-bottom': sizeMap[props.size] + 10 + 'rpx',
+  '--icon-right-radius': 0.6 *sizeMap[props.size] + 10 + 'rpx'
 };
 </script>
 
 <style lang="less">
 .loading-btn {
   position: relative;
-  width: 100rpx;
-  height: 100rpx;
+  width: var(--icon-size);
+  height: var(--icon-size);
   &:after {
     content: "";
     position: absolute;
@@ -27,14 +39,14 @@ const cssStyle = {
     height: 100%;
     background-color: var(--bg-color);
     animation: rotateAnim 0.5s linear infinite;
-    border-radius: 20rpx;
+    border-radius: 6rpx;
   }
   &:before {
     content: "";
     position: absolute;
     width: 100%;
     height: 20rpx;
-    top: 110rpx;
+    top: var(--icon-bottom);
     opacity: 0.3;
     animation: shadowAnim 0.5s linear infinite;
     background-color: #000;
@@ -50,8 +62,8 @@ const cssStyle = {
     transform: translateY(18rpx) rotate(22.5deg);
   }
   50% {
-    transform: translateY(36rpx) scale(1, 0.9) rotate(45deg);
-    border-bottom-right-radius: 80rpx;
+    transform: translateY(32rpx) scale(1, 0.9) rotate(45deg);
+    border-bottom-right-radius: var(--icon-right-radius);
   }
   75% {
     transform: translateY(18rpx) rotate(67.5deg);
