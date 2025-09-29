@@ -5,7 +5,13 @@
 <!--      <van-icon :size="30" name="search" />-->
 <!--    </view>-->
     <view class="content-wrap">
-      <VirtualList v-model:value="list" />
+      <VirtualList :dataSource="list" >
+        <template #default="{item}">
+          <view class="item">
+            <view>{{item.label}} - {{item.value}}</view>
+          </view>
+        </template>
+      </VirtualList>
     </view>
   </view>
 </template>
@@ -28,7 +34,10 @@ async function getList() {
 
 function mockData() {
   for(let i=0; i<1000; i++) {
-    list.value.push(faker.lorem.sentences())
+    list.value.push({
+      label: i + 1,
+      value:faker.lorem.sentences()
+    })
   }
 }
 
@@ -37,4 +46,12 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+.content-wrap {
+  height: 100%;
+}
+.item {
+  padding: 20rpx 0;
+  border-bottom: 1px solid #eee;
+}
+</style>
