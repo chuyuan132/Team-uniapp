@@ -1,9 +1,14 @@
 import { GET, POST } from '@/service/service';
+import type {
+  IGetUserListRequest,
+  IUserLoginRequest,
+  IUserRegisterRequest,
+} from '@/typing';
 /**
  * 用户登录
  * @param params
  */
-export function userLogin(params: userApi.IUserLoginRequest) {
+export function userLogin(params: IUserLoginRequest) {
   return POST('/user/login', params);
 }
 
@@ -12,7 +17,7 @@ export function userLogin(params: userApi.IUserLoginRequest) {
  * @param params
  * @returns
  */
-export function userRegister(params: userApi.IUserRegisterRequest) {
+export function userRegister(params: IUserRegisterRequest) {
   return POST('/user/register', params);
 }
 
@@ -20,6 +25,6 @@ export function userRegister(params: userApi.IUserRegisterRequest) {
  * 获取用户列表
  * @returns
  */
-export function getUserList(params: userApi.IGetUserListRequest) {
+export function getUserList(params: IGetUserListRequest) {
   return GET('/user/list', params);
 }
