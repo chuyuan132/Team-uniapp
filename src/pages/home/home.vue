@@ -13,16 +13,16 @@
 </template>
 
 <script lang="ts" setup>
-import VirtualList from "@/components/virtual-list/index.vue";
-import UserInfoCard from "./components/user-info-card.vue";
-import { getUserList } from "@/api";
-import { onMounted, ref } from "vue";
+import VirtualList from '@/components/virtual-list/index.vue';
+import UserInfoCard from './components/user-info-card.vue';
+import { getUserList } from '@/api';
+import { onMounted, ref } from 'vue';
 
 const list = ref<any[]>([]);
 const queryParams = {
   page_no: 2,
   page_size: 10,
-}
+};
 async function getListByPage() {
   const { data } = await getUserList(queryParams);
   return data.records || [];
@@ -30,16 +30,16 @@ async function getListByPage() {
 
 function loadMore(done: () => void) {
   queryParams.page_no++;
-  getListByPage().then(res => {
+  getListByPage().then((res) => {
     list.value.push(...res);
-    done()
-  })
+    done();
+  });
 }
 
 onMounted(() => {
-  getListByPage().then(res => {
+  getListByPage().then((res) => {
     list.value = res;
-  })
+  });
 });
 </script>
 

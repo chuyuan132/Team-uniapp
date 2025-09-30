@@ -1,6 +1,7 @@
-import {showNotify, showToast} from "vant";
+import type { IRequestResult } from '@/typing';
+import { showToast } from 'vant';
 
-const BASE_URL = "http://localhost:8001";
+const BASE_URL = 'http://localhost:8001';
 const TIME_OUT = 5000;
 
 interface IResult {
@@ -15,9 +16,9 @@ interface IResult {
  */
 function request(options: UniApp.RequestOptions) {
   options.url = BASE_URL + options.url;
-  return new Promise<commonRequest.IRequestResult>((resolve, reject) => {
+  return new Promise<IRequestResult>((resolve, reject) => {
     const header = {
-      "content-type": "application/json",
+      'content-type': 'application/json',
       ...options.header,
     };
     uni.request({
@@ -27,14 +28,14 @@ function request(options: UniApp.RequestOptions) {
       success: (res) => {
         const data = res.data as IResult;
         if (data.code !== 200) {
-          showToast(data.message)
+          showToast(data.message);
           reject(data);
         } else {
           resolve(data);
         }
       },
       fail: (err) => {
-        showToast("系统错误,请稍后重试");
+        showToast('系统错误,请稍后重试');
         reject(err);
       },
     });
@@ -50,9 +51,9 @@ function request(options: UniApp.RequestOptions) {
 function GET(url: string, data: Record<string, any> = {}) {
   return request({
     url,
-    method: "GET",
+    method: 'GET',
     header: {
-      "content-type": "application/x-www-form-urlencoded",
+      'content-type': 'application/x-www-form-urlencoded',
     },
     data,
   } as UniApp.RequestOptions);
@@ -67,7 +68,7 @@ function GET(url: string, data: Record<string, any> = {}) {
 function POST(url: string, data: Record<string, any> = {}) {
   return request({
     url,
-    method: "POST",
+    method: 'POST',
     data,
   } as UniApp.RequestOptions);
 }

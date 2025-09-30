@@ -1,5 +1,10 @@
 <template>
-  <scroll-view scroll-y="true" class="virtual-container" @scroll="handleScroll" :show-scrollbar="false">
+  <scroll-view
+    scroll-y="true"
+    class="virtual-container"
+    @scroll="handleScroll"
+    :show-scrollbar="false"
+  >
     <view class="empty-block" :style="{ height: totalHeight + 'px' }"></view>
     <view
       class="virtual-list"
@@ -28,8 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch, nextTick } from "vue";
-import Loading from "@/components/loading/index.vue";
+import { onMounted, ref, computed, watch, nextTick } from 'vue';
+import Loading from '@/components/loading/index.vue';
 const props = defineProps({
   dataSource: {
     type: Array,
@@ -46,7 +51,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(["loadMore"]);
+const emits = defineEmits(['loadMore']);
 
 interface IPositionItem {
   height: number;
@@ -75,7 +80,7 @@ const totalHeight = computed(() => {
 const renderList = computed(() => {
   return (virtualList.value || []).slice(
     startIndex.value - aboveCount.value,
-    endIndex.value + belowCount.value
+    endIndex.value + belowCount.value,
   );
 });
 
@@ -86,7 +91,7 @@ const aboveCount = computed(() => {
 const belowCount = computed(() => {
   return Math.min(
     (virtualList.value || []).length - endIndex.value,
-    visibleCount.value * props.buffCount
+    visibleCount.value * props.buffCount,
   );
 });
 
@@ -192,7 +197,7 @@ function handleScroll(e: any) {
     virtualList.value.length
   ) {
     loading.value = true;
-    emits("loadMore", () => {
+    emits('loadMore', () => {
       loading.value = false;
     });
   }
@@ -201,7 +206,7 @@ function handleScroll(e: any) {
 function updatePositions() {
   uni
     .createSelectorQuery()
-    .selectAll(".virtual-item")
+    .selectAll('.virtual-item')
     .boundingClientRect((res: any) => {
       if (!res || res.length === 0) return;
 
@@ -246,13 +251,13 @@ watch(
   {
     deep: true,
     immediate: true,
-  }
+  },
 );
 
 onMounted(() => {
   uni
     .createSelectorQuery()
-    .select(".virtual-container")
+    .select('.virtual-container')
     .boundingClientRect((res: any) => {
       screenHeight.value = res.height;
       visibleCount.value = Math.ceil(screenHeight.value / props.itemHeight);

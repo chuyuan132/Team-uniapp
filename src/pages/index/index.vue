@@ -8,22 +8,18 @@
 </template>
 
 <script setup lang="ts">
-
-
 function toLogin() {
   uni.navigateTo({
-    url: '/pages/login/login'
-  })
+    url: '/pages/login/login',
+  });
 }
 
 function toRegister() {
   uni.navigateTo({
-    url: '/pages/register/register'
-  })
+    url: '/pages/register/register',
+  });
 }
-
 </script>
-
 
 <style scoped lang="less">
 .home-page {
@@ -32,7 +28,7 @@ function toRegister() {
   justify-content: flex-end;
   width: 100%;
   height: 100%;
-  background: url('/static/images/bg.png') 0 0/cover;
+  background: url('/static/images/bg.png') 0 0 / cover;
 }
 .btn-wrap {
   padding: 0 10% 20%;

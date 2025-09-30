@@ -1,10 +1,10 @@
-import { GET, POST } from "@/service/service";
+import { GET, POST } from '@/service/service';
 /**
  * 用户登录
  * @param params
  */
 export function userLogin(params: userApi.IUserLoginRequest) {
-  return POST("/user/login", params);
+  return POST('/user/login', params);
 }
 
 /**
@@ -13,7 +13,7 @@ export function userLogin(params: userApi.IUserLoginRequest) {
  * @returns
  */
 export function userRegister(params: userApi.IUserRegisterRequest) {
-  return POST("/user/register", params);
+  return POST('/user/register', params);
 }
 
 /**
@@ -21,5 +21,5 @@ export function userRegister(params: userApi.IUserRegisterRequest) {
  * @returns
  */
 export function getUserList(params: userApi.IGetUserListRequest) {
-  return GET("/user/list", params);
+  return GET('/user/list', params);
 }

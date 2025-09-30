@@ -42,14 +42,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { showToast, closeToast } from "vant";
-import { userLogin } from "@/api";
+import { ref } from 'vue';
+import { showToast, closeToast } from 'vant';
+import { userLogin } from '@/api';
 
 const loading = ref(false);
 const formState = ref({
-  phone: "",
-  password: "",
+  phone: '',
+  password: '',
 });
 
 /**
@@ -58,7 +58,7 @@ const formState = ref({
 async function handleLogin() {
   const { phone, password } = formState.value;
   if (!phone || !password) {
-    showToast("请完整输入手机号或密码");
+    showToast('请完整输入手机号或密码');
     return;
   }
   if (!/^1[3,4,5,6,7,8,9][0-9]{9}$/.test(phone)) {
@@ -76,7 +76,7 @@ async function handleLogin() {
     showToast('登录成功');
     setTimeout(() => {
       uni.redirectTo({
-        url: "/pages/home/home",
+        url: '/pages/home/home',
       });
     }, 1000);
   } finally {
@@ -95,9 +95,9 @@ function findPassword() {
  * 去注册
  */
 function toRegister() {
-  closeToast()
+  closeToast();
   uni.navigateTo({
-    url: "/pages/register/register",
+    url: '/pages/register/register',
   });
 }
 </script>

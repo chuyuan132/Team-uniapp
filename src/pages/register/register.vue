@@ -47,24 +47,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import {closeToast, showToast} from "vant";
-import { userRegister } from "@/api";
+import { ref } from 'vue';
+import { closeToast, showToast } from 'vant';
+import { userRegister } from '@/api';
 
 const loading = ref(false);
 const formState = ref({
-  phone: "",
-  password: "",
-  username: "",
+  phone: '',
+  password: '',
+  username: '',
 });
 
 /**
  * 去登录
  */
 function toLogin() {
-  closeToast()
+  closeToast();
   uni.redirectTo({
-    url: "/pages/login/login",
+    url: '/pages/login/login',
   });
 }
 
@@ -78,11 +78,11 @@ async function handleRegister() {
     return;
   }
   if (!/^1[3,4,5,6,7,8,9][0-9]{9}$/.test(phone)) {
-    showToast("手机号码格式错误");
+    showToast('手机号码格式错误');
     return;
   }
   if (password.trim().length < 8) {
-    showToast("密码不能小于八位");
+    showToast('密码不能小于八位');
     return;
   }
   try {
@@ -92,10 +92,10 @@ async function handleRegister() {
       password,
       username,
     });
-    showToast("注册成功");
+    showToast('注册成功');
     setTimeout(() => {
       uni.redirectTo({
-        url: "/pages/login/login",
+        url: '/pages/login/login',
       });
     }, 1000);
   } finally {

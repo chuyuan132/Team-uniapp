@@ -1,28 +1,31 @@
 <template>
   <view class="user-info-card-item">
     <view class="avatar-wrap">
-      <van-image
-        class="image"
-        :src="item.avatar"
-      />
+      <van-image class="image" :src="item.avatar" />
     </view>
     <view class="info-wrap">
-      <view class="name">{{ item.username || ''}}</view>
+      <view class="name">{{ item.username || '' }}</view>
       <view class="profile">{{ item.profile || '' }}</view>
       <view class="tag-wrap">
-        <van-tag class="tag" v-for="(tag,index) in item.tag" :key="index" type="primary">{{tag}}</van-tag>
+        <van-tag
+          class="tag"
+          v-for="(tag, index) in item.tag_list"
+          :key="index"
+          type="primary"
+          >{{ tag }}</van-tag
+        >
       </view>
     </view>
-    <view class="operation-wrap">
-    </view>
+    <view class="operation-wrap"> </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue'
+import type { IGetUserListItem } from '@/typing';
+import type { PropType } from 'vue';
 defineProps({
   item: {
-    type: Object as PropType<userApi.IGetUserListItem>,
+    type: Object as PropType<IGetUserListItem>,
     default: () => ({}),
   },
 });
@@ -58,7 +61,7 @@ defineProps({
     text-overflow: ellipsis;
     overflow: hidden;
     font-size: 24rpx;
-    color:#ccc;
+    color: #ccc;
     margin: 10rpx 0;
   }
   .tag-wrap .tag {

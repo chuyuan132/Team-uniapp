@@ -8,11 +8,11 @@
 const props = defineProps({
   bgColor: {
     type: String,
-    default: "#409eff",
+    default: '#409eff',
   },
   size: {
     type: String,
-    default: "small",
+    default: 'small',
   },
 });
 
@@ -22,10 +22,10 @@ const sizeMap: any = {
 };
 
 const cssStyle = {
-  "--bg-color": props.bgColor,
-  "--icon-size": sizeMap[props.size] + "rpx",
-  "--icon-bottom": sizeMap[props.size] + 10 + "rpx",
-  "--icon-right-radius": 0.6 * sizeMap[props.size] + 10 + "rpx",
+  '--bg-color': props.bgColor,
+  '--icon-size': sizeMap[props.size] + 'rpx',
+  '--icon-bottom': sizeMap[props.size] + 10 + 'rpx',
+  '--icon-right-radius': 0.6 * sizeMap[props.size] + 10 + 'rpx',
 };
 </script>
 
@@ -38,7 +38,7 @@ const cssStyle = {
   width: var(--icon-size);
   height: var(--icon-size);
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;
@@ -47,7 +47,7 @@ const cssStyle = {
     border-radius: 6rpx;
   }
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     height: 20rpx;
