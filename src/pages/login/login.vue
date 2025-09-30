@@ -1,5 +1,5 @@
 <template>
-  <view class="common-page">
+  <view class="common-page curr-page">
     <view class="content-wrap">
       <view class="top">
         <view class="title">欢迎回来！很高兴再见到你</view>
@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { showNotify } from "vant";
+import { showToast, closeToast } from "vant";
 import { userLogin } from "@/api";
 
 const loading = ref(false);
@@ -58,25 +58,14 @@ const formState = ref({
 async function handleLogin() {
   const { phone, password } = formState.value;
   if (!phone || !password) {
-    showNotify({
-      type: "warning",
-      message: "请完整输入手机号或密码",
-    });
+    showToast("请完整输入手机号或密码");
     return;
   }
   if (!/^1[3,4,5,6,7,8,9][0-9]{9}$/.test(phone)) {
-    showNotify({
-      type: "warning",
-      message: "手机号码格式错误",
-    });
-    return;
+    return showToast('手机号码格式错误');
   }
   if (password.trim().length < 8) {
-    showNotify({
-      type: "warning",
-      message: "密码不能小于八位",
-    });
-    return;
+    return showToast('密码不能小于八位');
   }
   try {
     loading.value = true;
@@ -84,7 +73,7 @@ async function handleLogin() {
       phone,
       password,
     });
-    showNotify({ type: "success", message: "登录成功" });
+    showToast('登录成功');
     setTimeout(() => {
       uni.redirectTo({
         url: "/pages/home/home",
@@ -99,13 +88,14 @@ async function handleLogin() {
  * 找回密码
  */
 function findPassword() {
-  showNotify({ type: "primary", message: "该功能暂未开放" });
+  showToast('该功能暂未开放');
 }
 
 /**
  * 去注册
  */
 function toRegister() {
+  closeToast()
   uni.navigateTo({
     url: "/pages/register/register",
   });
@@ -113,6 +103,9 @@ function toRegister() {
 </script>
 
 <style lang="less" scoped>
+.curr-page {
+  background-color: #fff;
+}
 .content-wrap {
   display: flex;
   height: 100%;

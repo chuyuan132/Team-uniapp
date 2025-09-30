@@ -28,4 +28,15 @@ declare namespace userApi {
     page_size: number;
     page_no: number;
   }
+
+  interface IGetUserListItem {
+    id: number;
+    username: string;
+    avatar: string;
+    profile: string;
+    user_role: string;
+    tag_list: string[];
+    created_at: string;
+    updated_at: string;
+  }
 }

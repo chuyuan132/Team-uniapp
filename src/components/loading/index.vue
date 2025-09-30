@@ -1,5 +1,7 @@
 <template>
-  <view class="loading-btn" :style="cssStyle"></view>
+  <view class="loading-btn">
+    <view class="inner" :style="cssStyle"></view>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -10,25 +12,28 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'small'
-  }
+    default: "small",
+  },
 });
 
 const sizeMap: any = {
   small: 50,
-  large: 100
-}
+  large: 100,
+};
 
 const cssStyle = {
   "--bg-color": props.bgColor,
-  '--icon-size': sizeMap[props.size] + 'rpx',
-  '--icon-bottom': sizeMap[props.size] + 10 + 'rpx',
-  '--icon-right-radius': 0.6 *sizeMap[props.size] + 10 + 'rpx'
+  "--icon-size": sizeMap[props.size] + "rpx",
+  "--icon-bottom": sizeMap[props.size] + 10 + "rpx",
+  "--icon-right-radius": 0.6 * sizeMap[props.size] + 10 + "rpx",
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .loading-btn {
+  padding: 40rpx;
+}
+.inner {
   position: relative;
   width: var(--icon-size);
   height: var(--icon-size);

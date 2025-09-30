@@ -1,14 +1,10 @@
 <template>
   <view class="common-page">
-<!--    <view class="header-wrap">-->
-<!--      <text>快来寻找志同道合的伙伴吧</text>-->
-<!--      <van-icon :size="30" name="search" />-->
-<!--    </view>-->
     <view class="content-wrap">
       <VirtualList :dataSource="list" @load-more="loadMore">
-        <template #default="{item}">
+        <template #default="{ item }">
           <view class="item">
-            <view>{{item.label}} - {{item.value}}</view>
+            <UserInfoCard :item="item" />
           </view>
         </template>
       </VirtualList>
@@ -18,47 +14,32 @@
 
 <script lang="ts" setup>
 import VirtualList from "@/components/virtual-list/index.vue";
-import faker from 'faker'
-import {getUserList} from "@/api";
-import {onMounted, ref} from "vue";
+import UserInfoCard from "./components/user-info-card.vue";
+import { getUserList } from "@/api";
+import { onMounted, ref } from "vue";
 
 const list = ref<any[]>([]);
-
-async function getList() {
-  const { data } = await getUserList({
-    page_no: 2,
-    page_size: 10,
-  });
+const queryParams = {
+  page_no: 2,
+  page_size: 10,
+}
+async function getListByPage() {
+  const { data } = await getUserList(queryParams);
+  return data.records || [];
 }
 
-function mockData() {
-  for(let i=0; i<10; i++) {
-    list.value.push({
-      label: i + 1,
-      value:faker.lorem.sentences()
-    })
-  }
-}
-
-
-function loadMore(done:() => void) {
-  const addList:any[] = [];
-  const length = list.value.length;
-  setTimeout(() => {
-    for(let i=0; i<10; i++) {
-      addList.push({
-        label: length + i,
-        value:faker.lorem.sentences()
-      })
-    }
-    list.value.push(...addList);
+function loadMore(done: () => void) {
+  queryParams.page_no++;
+  getListByPage().then(res => {
+    list.value.push(...res);
     done()
-  }, 2000)
-
+  })
 }
 
 onMounted(() => {
-  mockData()
+  getListByPage().then(res => {
+    list.value = res;
+  })
 });
 </script>
 

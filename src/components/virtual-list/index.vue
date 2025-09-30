@@ -1,16 +1,19 @@
 <template>
-  <scroll-view scroll-y="true" class="virtual-container" @scroll="handleScroll">
+  <scroll-view scroll-y="true" class="virtual-container" @scroll="handleScroll" :show-scrollbar="false">
     <view class="empty-block" :style="{ height: totalHeight + 'px' }"></view>
-    <view class="virtual-list" :style="{ transform: 'translateY(' + offsetY + 'px)' }">
+    <view
+      class="virtual-list"
+      :style="{ transform: 'translateY(' + offsetY + 'px)' }"
+    >
       <view
-          class="virtual-item"
-          v-for="item in renderList"
-          :id="item._index"
-          :key="item._index"
-          :data-index="item._index"
+        class="virtual-item"
+        v-for="item in renderList"
+        :id="item._index"
+        :key="item._index"
+        :data-index="item._index"
       >
         <slot name="default" :item="item.origin">
-          <view>{{item.origin}}</view>
+          <view>{{ item.origin }}</view>
         </slot>
       </view>
     </view>
@@ -20,7 +23,6 @@
           <Loading />
         </view>
       </slot>
-
     </view>
   </scroll-view>
 </template>
@@ -40,11 +42,11 @@ const props = defineProps({
   },
   buffCount: {
     type: Number,
-    default: 1
-  }
+    default: 1,
+  },
 });
 
-const emits = defineEmits(['loadMore'])
+const emits = defineEmits(["loadMore"]);
 
 interface IPositionItem {
   height: number;
@@ -71,16 +73,22 @@ const totalHeight = computed(() => {
 });
 
 const renderList = computed(() => {
-  return (virtualList.value || []).slice(startIndex.value - aboveCount.value, endIndex.value + belowCount.value);
+  return (virtualList.value || []).slice(
+    startIndex.value - aboveCount.value,
+    endIndex.value + belowCount.value
+  );
 });
 
 const aboveCount = computed(() => {
-  return Math.min(startIndex.value, visibleCount.value * props.buffCount)
-})
+  return Math.min(startIndex.value, visibleCount.value * props.buffCount);
+});
 
 const belowCount = computed(() => {
-  return Math.min((virtualList.value || []).length - endIndex.value, visibleCount.value * props.buffCount)
-})
+  return Math.min(
+    (virtualList.value || []).length - endIndex.value,
+    visibleCount.value * props.buffCount
+  );
+});
 
 // 计算所有项的预估位置信息
 function setPositions(arr: any[]) {
@@ -124,30 +132,31 @@ function formatVirtualList(arr: any) {
 
 // 二分法查找startIndex
 function getStartIndex(scrollTop: number) {
- let left = 0;
+  let left = 0;
   let right = positions.value.length - 1;
   let result = null;
- while (left <= right) {
+  while (left <= right) {
     const middle = Math.floor(left + (right - left) / 2);
-   const middleValue = positions.value[middle].bottom;
-   if (middleValue === scrollTop) {
-    return middle + 1;
-   } else if (middleValue < scrollTop) {
-     left = middle + 1;
-   } else {
+    const middleValue = positions.value[middle].bottom;
+    if (middleValue === scrollTop) {
+      return middle + 1;
+    } else if (middleValue < scrollTop) {
+      left = middle + 1;
+    } else {
       if (result == null || result > middle) {
-       result = middle;
-     }
-     right = middle - 1;
+        result = middle;
+      }
+      right = middle - 1;
     }
- }
- return result;
+  }
+  return result;
 }
 
 function setOffet() {
-
-  if(startIndex.value >= 1) {
-    const size = positions.value[startIndex.value - 1].bottom - positions.value[startIndex.value - aboveCount.value].top;
+  if (startIndex.value >= 1) {
+    const size =
+      positions.value[startIndex.value - 1].bottom -
+      positions.value[startIndex.value - aboveCount.value].top;
     offsetY.value = positions.value[startIndex.value].top - size;
   } else {
     offsetY.value = 0;
@@ -156,7 +165,7 @@ function setOffet() {
 
 let isMeasuring = false;
 const bottomThreshold = 50; // 触底阈值
-const loading = ref(false)
+const loading = ref(false);
 function handleScroll(e: any) {
   const scrollTop = e.detail.scrollTop;
   const newStart = getStartIndex(scrollTop) as number;
@@ -177,77 +186,79 @@ function handleScroll(e: any) {
       }, 100);
     });
   }
-  if(totalHeight.value - (scrollTop + screenHeight.value) <= bottomThreshold && !loading.value && virtualList.value.length) {
+  if (
+    totalHeight.value - (scrollTop + screenHeight.value) <= bottomThreshold &&
+    !loading.value &&
+    virtualList.value.length
+  ) {
     loading.value = true;
-    emits('loadMore', () => {
+    emits("loadMore", () => {
       loading.value = false;
-    })
+    });
   }
 }
 
 function updatePositions() {
   uni
-      .createSelectorQuery()
-      .selectAll(".virtual-item")
-      .boundingClientRect((res: any) => {
+    .createSelectorQuery()
+    .selectAll(".virtual-item")
+    .boundingClientRect((res: any) => {
+      if (!res || res.length === 0) return;
 
-        if (!res || res.length === 0) return;
+      let hasPositionChanged = false;
 
-        let hasPositionChanged = false;
+      for (let i = 0; i < res.length; i++) {
+        const item = res[i];
+        const index = Number(item.id);
 
+        if (!positions.value[index]) continue;
 
-        for (let i = 0; i < res.length; i++) {
-          const item = res[i];
-          const index = Number(item.id);
+        const oldHeight = positions.value[index].height;
+        const newHeight = item.height;
 
-          if (!positions.value[index]) continue;
-
-          const oldHeight = positions.value[index].height;
-          const newHeight = item.height;
-
-          const diff = newHeight - oldHeight;
-          if (Math.abs(diff) > 1) {
-            positions.value[index].height = newHeight;
-            hasPositionChanged = true;
-          }
+        const diff = newHeight - oldHeight;
+        if (Math.abs(diff) > 1) {
+          positions.value[index].height = newHeight;
+          hasPositionChanged = true;
         }
+      }
 
-        if (hasPositionChanged) {
-          let currentTop = 0;
-          for (let j = 0; j < positions.value.length; j++) {
-            const item = positions.value[j];
-            item.top = currentTop;
-            item.bottom = currentTop + item.height;
-            currentTop = item.bottom;
-          }
-          setOffet();
+      if (hasPositionChanged) {
+        let currentTop = 0;
+        for (let j = 0; j < positions.value.length; j++) {
+          const item = positions.value[j];
+          item.top = currentTop;
+          item.bottom = currentTop + item.height;
+          currentTop = item.bottom;
         }
-      })
-      .exec();
+        setOffet();
+      }
+    })
+    .exec();
 }
 
 watch(
-    () => props.dataSource,
-    (nVal) => {
-      virtualList.value = formatVirtualList(nVal) as IVirtualItem[];
-      setPositions(nVal);
-    },
-    {
-      deep: true,
-      immediate: true,
-    }
+  () => props.dataSource,
+  (nVal) => {
+    virtualList.value = formatVirtualList(nVal) as IVirtualItem[];
+    setPositions(nVal);
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
 );
 
 onMounted(() => {
   uni
-      .createSelectorQuery()
-      .select('.virtual-container')
-      .boundingClientRect((res:any) => {
-        screenHeight.value = res.height;
-        visibleCount.value = Math.ceil(screenHeight.value / props.itemHeight);
-        endIndex.value = startIndex.value + visibleCount.value;
-      })
-      .exec();
+    .createSelectorQuery()
+    .select(".virtual-container")
+    .boundingClientRect((res: any) => {
+      screenHeight.value = res.height;
+      visibleCount.value = Math.ceil(screenHeight.value / props.itemHeight);
+      endIndex.value = startIndex.value + visibleCount.value;
+    })
+    .exec();
 });
 </script>
 
@@ -271,6 +282,5 @@ onMounted(() => {
 .loading-wrap {
   display: flex;
   justify-content: center;
-  padding: 20rpx 0;
 }
 </style>

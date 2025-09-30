@@ -1,5 +1,5 @@
 <template>
-  <view class="common-page">
+  <view class="common-page curr-page">
     <view class="content-wrap">
       <view class="top">
         <view class="title">哈喽！注册开始使用吧</view>
@@ -48,7 +48,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { showNotify } from "vant";
+import {closeToast, showToast} from "vant";
 import { userRegister } from "@/api";
 
 const loading = ref(false);
@@ -62,6 +62,7 @@ const formState = ref({
  * 去登录
  */
 function toLogin() {
+  closeToast()
   uni.redirectTo({
     url: "/pages/login/login",
   });
@@ -73,24 +74,15 @@ function toLogin() {
 async function handleRegister() {
   const { phone, password, username } = formState.value;
   if (!phone || !password || !username) {
-    showNotify({
-      type: "warning",
-      message: "请填写完整信息",
-    });
+    showToast('请填写完整信息');
     return;
   }
   if (!/^1[3,4,5,6,7,8,9][0-9]{9}$/.test(phone)) {
-    showNotify({
-      type: "warning",
-      message: "手机号码格式错误",
-    });
+    showToast("手机号码格式错误");
     return;
   }
   if (password.trim().length < 8) {
-    showNotify({
-      type: "warning",
-      message: "密码不能小于八位",
-    });
+    showToast("密码不能小于八位");
     return;
   }
   try {
@@ -100,7 +92,7 @@ async function handleRegister() {
       password,
       username,
     });
-    showNotify({ type: "success", message: "注册成功" });
+    showToast("注册成功");
     setTimeout(() => {
       uni.redirectTo({
         url: "/pages/login/login",
@@ -113,6 +105,9 @@ async function handleRegister() {
 </script>
 
 <style lang="less" scoped>
+.curr-page {
+  background-color: #fff;
+}
 .content-wrap {
   display: flex;
   flex-direction: column;
