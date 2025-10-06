@@ -9,7 +9,7 @@
       <view class="tag-wrap">
         <van-tag
           class="tag"
-          v-for="(tag, index) in item.tag_list"
+          v-for="(tag, index) in item.tagList"
           :key="index"
           type="primary"
           >{{ tag }}</van-tag

@@ -1,5 +1,9 @@
 <template>
   <view class="common-page">
+    <view class="header-wrap">
+      <view>寻找志相道合的伙伴</view>
+      <view></view>
+    </view>
     <view class="content-wrap">
       <VirtualList :dataSource="list" @load-more="loadMore">
         <template #default="{ item }">
@@ -20,8 +24,8 @@ import { onMounted, ref } from 'vue';
 
 const list = ref<any[]>([]);
 const queryParams = {
-  page_no: 2,
-  page_size: 10,
+  pageNo: 1,
+  pageSize: 10,
 };
 async function getListByPage() {
   const { data } = await getUserList(queryParams);
@@ -29,7 +33,7 @@ async function getListByPage() {
 }
 
 function loadMore(done: () => void) {
-  queryParams.page_no++;
+  queryParams.pageNo++;
   getListByPage().then((res) => {
     list.value.push(...res);
     done();

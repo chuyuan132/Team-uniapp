@@ -1,4 +1,4 @@
-import { GET, POST } from '@/service/service';
+import { POST } from '@/service/service';
 import type {
   IGetUserListRequest,
   IUserLoginRequest,
@@ -26,5 +26,5 @@ export function userRegister(params: IUserRegisterRequest) {
  * @returns
  */
 export function getUserList(params: IGetUserListRequest) {
-  return GET('/user/list', params);
+  return POST('/user/list', params);
 }

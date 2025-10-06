@@ -8,10 +8,10 @@ export interface IUserLoginResponse {
   username: string;
   avatar: string;
   profile: string;
-  user_role: string;
-  tag_list: string[];
-  created_at: string;
-  updated_at: string;
+  userRole: string;
+  tagList: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IUserRegisterRequest {
@@ -22,10 +22,10 @@ export interface IUserRegisterRequest {
 
 export interface IGetUserListRequest {
   phone?: string;
-  tag_list?: string[];
+  tagList?: string[];
   username?: string;
-  page_size: number;
-  page_no: number;
+  pageSize: number;
+  pageNo: number;
 }
 
 export interface IGetUserListItem {
@@ -33,8 +33,8 @@ export interface IGetUserListItem {
   username: string;
   avatar: string;
   profile: string;
-  user_role: string;
-  tag_list: string[];
-  created_at: string;
-  updated_at: string;
+  userRole: string;
+  tagList: string[];
+  createdAt: string;
+  updatedAt: string;
 }

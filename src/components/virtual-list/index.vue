@@ -22,19 +22,12 @@
         </slot>
       </view>
     </view>
-    <view v-show="loading">
-      <slot name="loading">
-        <view class="loading-wrap">
-          <Loading />
-        </view>
-      </slot>
-    </view>
   </scroll-view>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed, watch, nextTick } from 'vue';
-import Loading from '@/components/loading/index.vue';
+import { closeToast, showLoadingToast } from 'vant';
 const props = defineProps({
   dataSource: {
     type: Array,
@@ -197,8 +190,10 @@ function handleScroll(e: any) {
     virtualList.value.length
   ) {
     loading.value = true;
+    showLoadingToast('加载中');
     emits('loadMore', () => {
       loading.value = false;
+      closeToast();
     });
   }
 }
